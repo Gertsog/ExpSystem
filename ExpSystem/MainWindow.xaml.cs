@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Win32;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ExpSystem
 {
@@ -20,19 +9,68 @@ namespace ExpSystem
     /// </summary>
     public partial class MainWindow : Window
     {
+        public string expSystemDB;
+        
         public MainWindow()
         {
             InitializeComponent();
+            dialog.Text = "Откройте файл или перетащите его на форму";
         }
 
-        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        /// <summary>
+        /// Открытие файла по нажатию кнопки
+        /// </summary>
+        private void openFile_Click(object sender, RoutedEventArgs e)
         {
-
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Multiselect = false;
+            fileDialog.Filter = "Text files (*.txt;*.mkb)|*.txt;*.mkb|All files (*.*)|*.*";
+            if (fileDialog.ShowDialog() == true)
+            {
+                expSystemDB = fileDialog.FileName;
+            }
+            this.Title = "ExpSystem - " + System.IO.Path.GetFileName(expSystemDB);
+            ReadData(expSystemDB);
         }
 
-        private void GetDropFile(object sender, MouseButtonEventArgs e)
+        /// <summary>
+        /// Реализация Drag-and-Drop
+        /// </summary>
+        private void FileDragDrop(object sender, DragEventArgs e)
         {
-            DragDrop.DoDragDrop(Grid, Grid.Resources, DragDropEffects.Copy);
+            if (e.Data.GetDataPresent(DataFormats.FileDrop, false) == true)
+                e.Effects = DragDropEffects.All;
         }
+
+        private void FileDragEnter(object sender, DragEventArgs e)
+        {
+            string droppedFile;
+            string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            droppedFile = droppedFiles.Last();
+            if ((System.IO.Path.GetExtension(droppedFile).ToLowerInvariant() == ".txt") || (System.IO.Path.GetExtension(droppedFile).ToLowerInvariant() ==".mkb"))
+            {
+                expSystemDB = droppedFile;
+                this.Title = "ExpSystem - " + System.IO.Path.GetFileName(expSystemDB);
+                ReadData(expSystemDB);
+            }
+        }
+
+        /// <summary>
+        /// Чтение данных из файла
+        /// </summary>
+        private void ReadData(string db)
+        {
+            FileReader fr = new FileReader();
+            fr.readFile(db);
+            title.Text = "";
+            foreach (string str in fr.Title)
+                title.Text += str + "\n";
+
+            QuestionsGrid.ItemsSource = fr.questions;
+            HypothesesGrid.ItemsSource = fr.hypotheses;
+            dialog.Text = fr.dialog;
+        }
+
     }
 }

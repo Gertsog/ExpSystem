@@ -5,24 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExpSystem"
         mc:Ignorable="d"
-        Title="MainWindow" Height="510" Width="471">
-    <Grid Name="Grid" Margin="0,0,2,0" MouseDown="GetDropFile">
+        Title="ExpSystem" Height="500" Width="480">
+    <Grid Name="Grid" Margin="0,0,0,0" AllowDrop="True" DragEnter="FileDragEnter" DragDrop.Drop="FileDragDrop" >
         <Grid.RowDefinitions>
             <RowDefinition Height="261*"/>
             <RowDefinition Height="156*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="22,141,0,0" VerticalAlignment="Top" Width="76" Grid.Row="1" Height="20"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="60,23,0,0" VerticalAlignment="Top" Width="35" Height="35"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="20,23,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="-2.107,-4.45" Height="35"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="346,141,0,0" VerticalAlignment="Top" Width="76" Grid.Row="1" Height="20"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="265,141,0,0" VerticalAlignment="Top" Width="76" Grid.Row="1" Height="20"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="184,141,0,0" VerticalAlignment="Top" Width="76" Grid.Row="1" Height="20"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="103,141,0,0" VerticalAlignment="Top" Width="76" Grid.Row="1" Height="20"/>
-        <DataGrid HorizontalAlignment="Left" Height="248" Margin="20,135,0,0" VerticalAlignment="Top" Width="190" Grid.RowSpan="2"/>
-        <DataGrid HorizontalAlignment="Left" Height="248" Margin="232,135,0,0" VerticalAlignment="Top" Width="190" Grid.RowSpan="2"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="22,102,0,0" Grid.Row="1" VerticalAlignment="Top" Height="24" Width="400"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="22,76,0,0" VerticalAlignment="Top" Height="45" Width="400"/>
+        
+        <Button Name="OpenFileButton" Click="openFile_Click" HorizontalAlignment="Left" Margin="20,15,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="-2.107,-4.45" Height="35">
+            <Image Source="icon/open-icon.png"></Image>
+        </Button>
+        <Button Name="StartButton" HorizontalAlignment="Left" Margin="60,15,0,0" VerticalAlignment="Top" Width="35" Height="35">
+            <Image Source="icon/start-icon.png" ></Image>
+        </Button>
 
+        <TextBlock Name="title" FontSize="12" TextWrapping="Wrap" HorizontalAlignment="Left" Margin="20,55,0,0" VerticalAlignment="Top" Height="50" Width="430"></TextBlock>
+
+        <DataGrid Name="HypothesesGrid" CanUserAddRows="False" AutoGenerateColumns="False" CanUserResizeColumns="False" HeadersVisibility="Column" HorizontalAlignment="Left" Height="275" Margin="20,110,0,0" VerticalAlignment="Top" Width="200" Grid.RowSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Гипотеза" Binding="{Binding HypothesisName }" Width="*" ></DataGridTextColumn>
+                <DataGridTextColumn Header="Вероятность" Binding="{Binding CurrentProbability}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid Name="QuestionsGrid" CanUserAddRows="False" AutoGenerateColumns="False" CanUserResizeColumns="False" HeadersVisibility="Column" HorizontalAlignment="Left" Height="275" Margin="250,110,0,0" VerticalAlignment="Top" Width="200" Grid.RowSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Вопрос" Binding="{Binding QuestionText}" Width="*" ></DataGridTextColumn>
+                <DataGridTextColumn Header="Ответ" Binding="{Binding Answer}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Name="dialog" TextAlignment="Center" HorizontalAlignment="Left" Margin="20,100,0,0" Grid.Row="1" VerticalAlignment="Top" Height="24" Width="430"/>
+
+        <Button Content="Да" HorizontalAlignment="Left" Margin="21,141,0,0" VerticalAlignment="Top" Width="82" Grid.Row="1" Height="20"/>
+        <Button Content="Скорее да" HorizontalAlignment="Left" Margin="108,141,0,0" VerticalAlignment="Top" Width="81" Grid.Row="1" Height="20"/>
+        <Button Content="Не знаю" HorizontalAlignment="Left" Margin="195,141,0,0" VerticalAlignment="Top" Width="81" Grid.Row="1" Height="20"/>
+        <Button Content="Скорее нет" HorizontalAlignment="Left" Margin="282,141,0,0" VerticalAlignment="Top" Width="81" Grid.Row="1" Height="20"/>
+        <Button Content="Нет" HorizontalAlignment="Left" Margin="368,141,0,0" VerticalAlignment="Top" Width="82" Grid.Row="1" Height="20"/>
     </Grid>
 </Window>
