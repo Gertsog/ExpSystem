@@ -16,6 +16,15 @@ namespace ExpSystem
         public float DefaultProbability { get; set; }
         public float CurrentProbability { get; set; }
 
+        public List<int> questionNumbers = new List<int>();
+        public List<float> pPositive = new List<float>();
+        public List<float> pNegative = new List<float>();
+
+        public Hypothesis()
+        {
+
+        }
+
         public Hypothesis(string hypothesisName, float defaultProbability)
         {
             HypothesisName = hypothesisName;

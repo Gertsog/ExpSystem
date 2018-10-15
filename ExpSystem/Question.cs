@@ -10,17 +10,25 @@ namespace ExpSystem
     {
         private int questionNumber;
         private string questionText;
-        private string answer;
+        private double answer;
 
         public int QuestionNumber { get; set; }
         public string QuestionText { get; set; }
-        public string Answer { get; set; }
+        public float Answer { get; set; }
 
+        public void GetAnswer(float answer)
+        {
+            this.answer = answer;
+        }
 
         public Question(string questionText)
         {
             QuestionText = questionText;
         }
 
+        public void setAnswer (float answer)
+        {
+
+        }
     }
 }

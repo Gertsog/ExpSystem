@@ -1,5 +1,8 @@
 ﻿using Microsoft.Win32;
+using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace ExpSystem
@@ -9,8 +12,11 @@ namespace ExpSystem
     /// </summary>
     public partial class MainWindow : Window
     {
+        private float answer;
         public string expSystemDB;
-        
+        FileReader fr = new FileReader();
+        Consultation consultation = new Consultation();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -48,12 +54,65 @@ namespace ExpSystem
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
             droppedFile = droppedFiles.Last();
-            if ((System.IO.Path.GetExtension(droppedFile).ToLowerInvariant() == ".txt") || (System.IO.Path.GetExtension(droppedFile).ToLowerInvariant() ==".mkb"))
+            if ((System.IO.Path.GetExtension(droppedFile).ToLowerInvariant() == ".txt") || (System.IO.Path.GetExtension(droppedFile).ToLowerInvariant() == ".mkb"))
             {
                 expSystemDB = droppedFile;
-                this.Title = "ExpSystem - " + System.IO.Path.GetFileName(expSystemDB);
+                Title = "ExpSystem - " + System.IO.Path.GetFileName(expSystemDB);
                 ReadData(expSystemDB);
             }
+        }
+
+        /// <summary>
+        /// Начало консультации
+        /// </summary>
+        private void startConsultation_Click(object sender, RoutedEventArgs e)
+        {
+            if (!fr.hypotheses.Any())
+            {
+                dialog.Text = "Файл не выбран";
+            }
+            else
+            {
+                new Task(() => consultation.consultate());
+            }
+        }
+
+        /// <summary>
+        /// Обработка кнопки "Да"
+        /// </summary>
+        private void Click0(object sender, RoutedEventArgs e)
+        {
+            answer = (float)0;
+        }
+
+        /// <summary>
+        /// Обработка кнопки "Скорее да"
+        /// </summary>
+        private void Click025(object sender, RoutedEventArgs e)
+        { 
+            answer = (float)0.25;
+        }
+
+        /// <summary>
+        /// Обработка кнопки "Не знаю"
+        /// </summary>
+        private void Click05(object sender, RoutedEventArgs e)
+        {
+            answer = (float)0.5;
+        }
+        /// <summary>
+        /// Обработка кнопки "Скорее нет"
+        /// </summary>
+        private void Click075(object sender, RoutedEventArgs e)
+        {
+            answer = (float)0.75;
+        }
+        /// <summary>
+        /// Обработка кнопки "Нет"
+        /// </summary>
+        private void Click1(object sender, RoutedEventArgs e)
+        {
+            answer = (float)1;
         }
 
         /// <summary>
@@ -61,15 +120,20 @@ namespace ExpSystem
         /// </summary>
         private void ReadData(string db)
         {
-            FileReader fr = new FileReader();
-            fr.readFile(db);
-            title.Text = "";
-            foreach (string str in fr.Title)
-                title.Text += str + "\n";
+            if (fr.readFile(db))
+            {
+                dialog.Text = "Для начала консультации нажмите кнопку \"Старт\"";
+                title.Text = "";
+                foreach (string str in fr.Title)
+                    title.Text += str + "\n";
 
-            QuestionsGrid.ItemsSource = fr.questions;
-            HypothesesGrid.ItemsSource = fr.hypotheses;
-            dialog.Text = fr.dialog;
+                QuestionsGrid.ItemsSource = fr.questions;
+                HypothesesGrid.ItemsSource = fr.hypotheses;
+            }
+            else
+            {
+                dialog.Text = fr.dialog;
+            }
         }
 
     }

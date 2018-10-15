@@ -54,7 +54,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Calculation.cs" />
+    <Compile Include="Consultation.cs" />
     <Compile Include="FileReader.cs" />
     <Compile Include="Question.cs" />
     <Page Include="MainWindow.xaml">
