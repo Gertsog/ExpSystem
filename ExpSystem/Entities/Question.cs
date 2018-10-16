@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExpSystem
 {
-    class Question
+    public class Question
     {
         private int questionNumber;
         private string questionText;
@@ -14,9 +14,9 @@ namespace ExpSystem
 
         public int QuestionNumber { get; set; }
         public string QuestionText { get; set; }
-        public float Answer { get; set; }
+        public double Answer { get; set; }
 
-        public void GetAnswer(float answer)
+        public void GetAnswer(double answer)
         {
             this.answer = answer;
         }
@@ -24,11 +24,6 @@ namespace ExpSystem
         public Question(string questionText)
         {
             QuestionText = questionText;
-        }
-
-        public void setAnswer (float answer)
-        {
-
         }
     }
 }

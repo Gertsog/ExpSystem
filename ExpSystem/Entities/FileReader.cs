@@ -7,15 +7,64 @@ using System.Collections.ObjectModel;
 
 namespace ExpSystem
 {
-    class FileReader
+    public class FileReader
     {
         public List<string> Title { get; set; }
 
-        public string dialog;
+        private string dialog;
+        public string Dialog
+        {
+            get { return dialog; }
+            set
+            {
+                if (dialog != value)
+                {
+                    dialog = value;
+                    OnPropertyChanged("Dialog");
+                }
+            }
+        }
+
+        private void OnPropertyChanged(string v)
+        {
+            throw new NotImplementedException();
+        }
+
         public string line;
         public List<string> lines;
-        public ObservableCollection<Hypothesis> hypotheses;
-        public ObservableCollection<Question> questions;
+
+        private ObservableCollection<Hypothesis> hypotheses = new ObservableCollection<Hypothesis>();
+        private ObservableCollection<Question> questions = new ObservableCollection<Question>();
+
+        public ObservableCollection<Hypothesis> Hypotheses
+        {
+            get { return hypotheses; }
+            set
+            {
+                if (hypotheses != value)
+                    hypotheses = value;
+            }
+        }
+        public ObservableCollection<Question> Questions
+        {
+            get { return questions; }
+            set
+            {
+                if (questions != value)
+                    questions = value;
+            }
+        }
+
+        public FileReader()
+        {
+
+        }
+
+        public FileReader(ObservableCollection<Hypothesis> hypotheses, ObservableCollection<Question> questions)
+        {
+            Hypotheses = hypotheses;
+            Questions = questions;
+        }
 
         public bool readFile (string path)
         {
@@ -75,7 +124,7 @@ namespace ExpSystem
             {
                 q.QuestionNumber = temp.IndexOf(q) + 1;
             }
-            questions = temp;
+            Questions = temp;
             return true;
         }
 
@@ -95,13 +144,13 @@ namespace ExpSystem
                     split[1] = split[1].Replace('.', ',');
                     Hypothesis hypothesis = new Hypothesis(split[0], float.Parse(split[1]));
 
-                    for (int i = 2; i < split.Length - 3; i += 3)
+                    for (int i = 2; i <= split.Length - 3; i += 3)
                     {
                         int questionNumber = int.Parse(split[i]);
                         split[i + 1] = split[i + 1].Replace('.', ',');
-                        float pPositive = float.Parse(split[i + 1]);
+                        double pPositive = double.Parse(split[i + 1]);
                         split[i + 2] = split[i + 2].Replace('.', ',');
-                        float pNegative = float.Parse(split[i + 2]);
+                        double pNegative = double.Parse(split[i + 2]);
 
                         hypothesis.questionNumbers.Add(questionNumber);
                         hypothesis.pPositive.Add(pPositive);
@@ -109,7 +158,7 @@ namespace ExpSystem
                     }
                     temp.Add(hypothesis);
                 }
-                hypotheses = temp;
+                Hypotheses = temp;
             }
             catch
             {

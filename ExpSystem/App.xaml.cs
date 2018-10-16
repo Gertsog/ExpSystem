@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExpSystem.View;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,11 @@ namespace ExpSystem
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            MainWindowVM viewModel = new MainWindowVM();
+            MainWindowView mainWindow = new MainWindowView(viewModel);
+            mainWindow.Show();
+        }
     }
 }
