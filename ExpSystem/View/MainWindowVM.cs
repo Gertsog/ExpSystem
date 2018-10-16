@@ -1,8 +1,6 @@
 ﻿using ExpSystem.MVVM;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 
 namespace ExpSystem.View
@@ -14,6 +12,9 @@ namespace ExpSystem.View
 
         #region properties
 
+        /// <summary>
+        /// Заголовок окна
+        /// </summary>
         private string windowTitle;
         public string WindowTitle
         {
@@ -30,6 +31,9 @@ namespace ExpSystem.View
             }
         }
 
+        /// <summary>
+        /// Путь к файлу
+        /// </summary>
         private string expSystemDB;
         public string ExpSystemDB
         {
@@ -44,6 +48,9 @@ namespace ExpSystem.View
             }
         }
 
+        /// <summary>
+        /// Заголовок базы знаний
+        /// </summary>
         private string title;
         public string Title
         {
@@ -58,6 +65,9 @@ namespace ExpSystem.View
             }
         }
 
+        /// <summary>
+        /// Сообщения для диалога с пользователем
+        /// </summary>
         private string dialog;
         public string Dialog
         {
@@ -72,6 +82,9 @@ namespace ExpSystem.View
             }
         }
 
+        /// <summary>
+        /// Коллекция гипотез
+        /// </summary>
         private ObservableCollection<Hypothesis> hypotheses;
         public ObservableCollection<Hypothesis> Hypotheses
         {
@@ -81,11 +94,14 @@ namespace ExpSystem.View
                 if (hypotheses != value)
                 {
                     hypotheses = value;
-                    OnPropertyChanged("Title");
+                    OnPropertyChanged("Hypotheses");
                 }
             }
         }
 
+        /// <summary>
+        /// Коллекция вопросов
+        /// </summary>
         private ObservableCollection<Question> questions;
         public ObservableCollection<Question> Questions
         {
@@ -95,7 +111,7 @@ namespace ExpSystem.View
                 if (questions != value)
                 {
                     questions = value;
-                    OnPropertyChanged("Title");
+                    OnPropertyChanged("Questions");
                 }
             }
         }

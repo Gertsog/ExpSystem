@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 
 namespace ExpSystem
 {
     public class FileReader
     {
+        #region properties
+        /// <summary>
+        /// Лист строк заголовка базы знаний
+        /// </summary>
         public List<string> Title { get; set; }
 
+        /// <summary>
+        /// Текст для диалога с пользователем
+        /// </summary>
         private string dialog;
         public string Dialog
         {
@@ -20,22 +25,14 @@ namespace ExpSystem
                 if (dialog != value)
                 {
                     dialog = value;
-                    OnPropertyChanged("Dialog");
                 }
             }
         }
 
-        private void OnPropertyChanged(string v)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string line;
-        public List<string> lines;
-
+        /// <summary>
+        /// Коллекция гипотез
+        /// </summary>
         private ObservableCollection<Hypothesis> hypotheses = new ObservableCollection<Hypothesis>();
-        private ObservableCollection<Question> questions = new ObservableCollection<Question>();
-
         public ObservableCollection<Hypothesis> Hypotheses
         {
             get { return hypotheses; }
@@ -45,6 +42,11 @@ namespace ExpSystem
                     hypotheses = value;
             }
         }
+
+        /// <summary>
+        /// Коллекция вопросов
+        /// </summary>
+        private ObservableCollection<Question> questions = new ObservableCollection<Question>();
         public ObservableCollection<Question> Questions
         {
             get { return questions; }
@@ -55,17 +57,22 @@ namespace ExpSystem
             }
         }
 
+        #endregion
+
+        #region ctor
+
         public FileReader()
         {
 
         }
 
-        public FileReader(ObservableCollection<Hypothesis> hypotheses, ObservableCollection<Question> questions)
-        {
-            Hypotheses = hypotheses;
-            Questions = questions;
-        }
+        #endregion
 
+        #region methods
+
+        /// <summary>
+        /// Чтение данных из файла
+        /// </summary>
         public bool readFile (string path)
         {
             System.IO.StreamReader file = new System.IO.StreamReader(path, Encoding.GetEncoding(1251));
@@ -81,8 +88,12 @@ namespace ExpSystem
             }
         }
 
+        /// <summary>
+        /// Считывание заголовка файла
+        /// </summary>
         public bool readTitle(System.IO.StreamReader stream)
         {
+            string line;
             List<string> lines = new List<string>();
             while (!string.IsNullOrEmpty(line = stream.ReadLine()))
             {
@@ -101,10 +112,13 @@ namespace ExpSystem
             }
         }
 
+        /// <summary>
+        /// Считывание вопросов
+        /// </summary>
         public bool readQuestions(System.IO.StreamReader stream)
         {
-
-            lines = new List<string>();
+            string line;
+            List<string> lines = new List<string>();
             while (!string.IsNullOrEmpty(line = stream.ReadLine()))
             {
                 lines.Add(line);
@@ -128,9 +142,13 @@ namespace ExpSystem
             return true;
         }
 
+        /// <summary>
+        /// Считывание гипотез
+        /// </summary>
         public bool readHypotheses(System.IO.StreamReader stream)
         {
-            lines = new List<string>();
+            string line;
+            List<string> lines = new List<string>();
             ObservableCollection<Hypothesis> temp = new ObservableCollection<Hypothesis>();
             while (!string.IsNullOrEmpty(line = stream.ReadLine()))
             {
@@ -167,5 +185,7 @@ namespace ExpSystem
             }
             return true;
         }
+
+        #endregion
     }
 }

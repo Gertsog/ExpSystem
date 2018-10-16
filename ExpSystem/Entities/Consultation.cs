@@ -1,24 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
+﻿using System.Linq;
 
 namespace ExpSystem
 {
     public class Consultation
     {
-        
+        /// <summary>
+        /// Текст для диалога с пользователем
+        /// </summary>
+        private string dialog;
+        public string Dialog
+        {
+            get { return dialog; }
+            set
+            {
+                if (dialog != value)
+                {
+                    dialog = value;
+                }
+            }
+        }
+
+        private int counter;
+
+
         public Consultation()
         {
 
         }
 
-        private int counter;
-
-        public string Dialog { get; set; }
-
+        /// <summary>
+        /// Счётчик вопросов
+        /// </summary>
         public void count(FileReader fr)
         {
             if (counter > 0)
@@ -28,12 +40,18 @@ namespace ExpSystem
             }
         }
 
+        /// <summary>
+        /// Начало консультации
+        /// </summary>
         public void startConsultation(FileReader fr)
         {
             counter = 1;
             setQuestion(fr);
         }
 
+        /// <summary>
+        /// Установка конкретного вопроса в текстовое поле
+        /// </summary>
         public void setQuestion(FileReader fr)
         {
             if (counter == 0)
@@ -52,6 +70,9 @@ namespace ExpSystem
             }
         }
         
+        /// <summary>
+        /// Плучение ответа на конкретный вопрос
+        /// </summary>
         public bool setAnswer(FileReader fr, double answer)
         {
             if (counter == 0)
@@ -73,6 +94,9 @@ namespace ExpSystem
             }
         }
 
+        /// <summary>
+        /// Пересчёт вероятностей
+        /// </summary>
         public void calculate(FileReader fr)
         {
             double probability;

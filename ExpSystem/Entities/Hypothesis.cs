@@ -9,10 +9,6 @@ namespace ExpSystem
 {
     public class Hypothesis
     {
-        private string hypothesisName;
-        private double defaultProbability;
-        private double currentProbability;
-
         public string HypothesisName { get; set; }
         public double DefaultProbability { get; set; }
         public double CurrentProbability { get; set; }

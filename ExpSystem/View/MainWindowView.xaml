@@ -7,26 +7,31 @@
         d:DataContext="{d:DesignInstance local:MainWindowVM}"
         mc:Ignorable="d"
         
-        Title="{Binding WindowTitle}" Height="500" Width="480">
+        Title="{Binding WindowTitle}" Height="600" Width="600">
+
     <Grid Name="Grid" Margin="0,0,0,0" AllowDrop="True" DragEnter="FileDragEnter" DragDrop.Drop="FileDragDrop">
-        
         <Grid.RowDefinitions>
             <RowDefinition Height="261*"/>
             <RowDefinition Height="156*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        
-        <Button Name="OpenFileButton" Command="{Binding OpenFile}" HorizontalAlignment="Left" Margin="20,15,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="-2.107,-4.45" Height="35">
+
+        <Button Name="OpenFileButton" Command="{Binding OpenFile}" HorizontalAlignment="Left"
+                Margin="20,10,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="-2.107,-4.45" Height="35">
             <Image Source="Icons/open-icon.png"/>
         </Button>
-        <Button Name="StartButton" Command="{Binding StartConsultation}" HorizontalAlignment="Left" Margin="60,15,0,0" VerticalAlignment="Top" Width="35" Height="35">
+        <Button Name="StartButton" Command="{Binding StartConsultation}" HorizontalAlignment="Left"
+                Margin="60,10,0,0" VerticalAlignment="Top" Width="35" Height="35">
             <Image Source="Icons/start-icon.png"/>
         </Button>
 
-        <TextBlock Name="title" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" FontSize="12" TextWrapping="Wrap" HorizontalAlignment="Left" Margin="20,55,0,0" VerticalAlignment="Top" Height="50" Width="430"></TextBlock>
+        <TextBlock Name="title" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" FontSize="12" TextWrapping="Wrap"
+                   HorizontalAlignment="Left" Margin="20,50,0,0" VerticalAlignment="Top" Height="50" Width="553"/>
 
-        <DataGrid Name="HypothesesGrid" ItemsSource="{Binding Hypotheses}" CanUserAddRows="False" CanUserResizeColumns="True" CanUserSortColumns="True" AutoGenerateColumns="False" HeadersVisibility="Column" HorizontalAlignment="Left" Height="275" Margin="20,110,0,0" VerticalAlignment="Top" Width="200" Grid.RowSpan="2">
-            
+        <DataGrid Name="HypothesesGrid" ItemsSource="{Binding Hypotheses}" CanUserAddRows="False" CanUserResizeColumns="True"
+                  CanUserSortColumns="True" AutoGenerateColumns="False" HeadersVisibility="Column" HorizontalAlignment="Left"
+                  Height="350" Width="260" Margin="20,105,0,0" VerticalAlignment="Top"  Grid.RowSpan="2">
+
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Гипотеза" Binding="{Binding HypothesisName}" Width="*"/>
                 <DataGridTextColumn Header="Вероятность" Binding="{Binding CurrentProbability, StringFormat=0.0000000}" Width="Auto">
@@ -38,7 +43,9 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid Name="QuestionsGrid" ItemsSource="{Binding Questions}" CanUserAddRows="False" CanUserResizeColumns="False" CanUserSortColumns="True" AutoGenerateColumns="False" HeadersVisibility="Column" HorizontalAlignment="Left" Height="275" Margin="250,110,0,0" VerticalAlignment="Top" Width="200" Grid.RowSpan="2">
+        <DataGrid Name="QuestionsGrid" ItemsSource="{Binding Questions}" CanUserAddRows="False" CanUserResizeColumns="False"
+                  CanUserSortColumns="True" AutoGenerateColumns="False" HeadersVisibility="Column" HorizontalAlignment="Left"
+                  Height="350" Width="250" Margin="320,105,0,0" VerticalAlignment="Top"  Grid.RowSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Вопрос" Binding="{Binding QuestionText}" Width="*"/>
                 <DataGridTextColumn Header="Ответ" Binding="{Binding Answer, StringFormat=0.00}">
@@ -49,15 +56,16 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
             </DataGrid.Columns>
-            
+
         </DataGrid>
 
-        <TextBlock Text="{Binding Dialog, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" HorizontalAlignment="Left" Margin="20,100,0,0" Grid.Row="1" VerticalAlignment="Top" Height="24" Width="430"/>
+        <TextBlock Text="{Binding Dialog, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" HorizontalAlignment="Left"
+                   Margin="20,120,0,0" Height="40" Width="560" Grid.Row="1" VerticalAlignment="Top" TextWrapping="Wrap"/>
 
-        <Button Content="Да" Command="{Binding Click1}" HorizontalAlignment="Left" Margin="21,141,0,0" VerticalAlignment="Top" Width="82" Grid.Row="1" Height="20"/>
-        <Button Content="Скорее да" Command="{Binding Click075}" HorizontalAlignment="Left" Margin="108,141,0,0" VerticalAlignment="Top" Width="81" Grid.Row="1" Height="20"/>
-        <Button Content="Не знаю" Command="{Binding Click05}" HorizontalAlignment="Left" Margin="195,141,0,0" VerticalAlignment="Top" Width="81" Grid.Row="1" Height="20"/>
-        <Button Content="Скорее нет" Command="{Binding Click025}" HorizontalAlignment="Left" Margin="282,141,0,0" VerticalAlignment="Top" Width="81" Grid.Row="1" Height="20"/>
-        <Button Content="Нет" Command="{Binding Click0}" HorizontalAlignment="Left" Margin="368,141,0,0" VerticalAlignment="Top" Width="82" Grid.Row="1" Height="20"/>
+        <Button Content="Да" Command="{Binding Click1}" HorizontalAlignment="Left" Margin="20,165,0,0" VerticalAlignment="Top" Width="90" Grid.Row="1" Height="30"/>
+        <Button Content="Скорее да" Command="{Binding Click075}" HorizontalAlignment="Left" Margin="135,165,0,0" VerticalAlignment="Top" Width="90" Grid.Row="1" Height="30"/>
+        <Button Content="Не знаю" Command="{Binding Click05}" HorizontalAlignment="Left" Margin="250,165,0,0" VerticalAlignment="Top" Width="90" Grid.Row="1" Height="30"/>
+        <Button Content="Скорее нет" Command="{Binding Click025}" HorizontalAlignment="Left" Margin="365,165,0,0" VerticalAlignment="Top" Width="90" Grid.Row="1" Height="30"/>
+        <Button Content="Нет" Command="{Binding Click0}" HorizontalAlignment="Left" Margin="480,165,0,0" VerticalAlignment="Top" Width="90" Grid.Row="1" Height="30"/>
     </Grid>
 </Window>
