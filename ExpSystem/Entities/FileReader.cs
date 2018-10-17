@@ -32,8 +32,8 @@ namespace ExpSystem
         /// <summary>
         /// Коллекция гипотез
         /// </summary>
-        private ObservableCollection<Hypothesis> hypotheses = new ObservableCollection<Hypothesis>();
-        public ObservableCollection<Hypothesis> Hypotheses
+        private List<Hypothesis> hypotheses = new List<Hypothesis>();
+        public List<Hypothesis> Hypotheses
         {
             get { return hypotheses; }
             set
@@ -46,8 +46,8 @@ namespace ExpSystem
         /// <summary>
         /// Коллекция вопросов
         /// </summary>
-        private ObservableCollection<Question> questions = new ObservableCollection<Question>();
-        public ObservableCollection<Question> Questions
+        private List<Question> questions = new List<Question>();
+        public List<Question> Questions
         {
             get { return questions; }
             set
@@ -73,7 +73,7 @@ namespace ExpSystem
         /// <summary>
         /// Чтение данных из файла
         /// </summary>
-        public bool readFile (string path)
+        public bool ReadFile (string path)
         {
             System.IO.StreamReader file = new System.IO.StreamReader(path, Encoding.GetEncoding(1251));
             if (readTitle(file) && readQuestions(file) && readHypotheses(file))
@@ -91,7 +91,7 @@ namespace ExpSystem
         /// <summary>
         /// Считывание заголовка файла
         /// </summary>
-        public bool readTitle(System.IO.StreamReader stream)
+        private bool readTitle(System.IO.StreamReader stream)
         {
             string line;
             List<string> lines = new List<string>();
@@ -115,7 +115,7 @@ namespace ExpSystem
         /// <summary>
         /// Считывание вопросов
         /// </summary>
-        public bool readQuestions(System.IO.StreamReader stream)
+        private bool readQuestions(System.IO.StreamReader stream)
         {
             string line;
             List<string> lines = new List<string>();
@@ -129,7 +129,7 @@ namespace ExpSystem
                 return false;
             }
             lines.Remove(lines.First());
-            ObservableCollection<Question> temp = new ObservableCollection<Question>();
+            List<Question> temp = new List<Question>();
             foreach (string l in lines)
             {
                 temp.Add(new Question(l));
@@ -145,11 +145,11 @@ namespace ExpSystem
         /// <summary>
         /// Считывание гипотез
         /// </summary>
-        public bool readHypotheses(System.IO.StreamReader stream)
+        private bool readHypotheses(System.IO.StreamReader stream)
         {
             string line;
             List<string> lines = new List<string>();
-            ObservableCollection<Hypothesis> temp = new ObservableCollection<Hypothesis>();
+            List<Hypothesis> temp = new List<Hypothesis>();
             while (!string.IsNullOrEmpty(line = stream.ReadLine()))
             {
                 lines.Add(line);

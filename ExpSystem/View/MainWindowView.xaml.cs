@@ -8,12 +8,12 @@ namespace ExpSystem.View
     /// </summary>
     public partial class MainWindowView : Window
     {
-        private MainWindowVM VM;
+        private MainWindowVM vm;
 
-        public MainWindowView(MainWindowVM VM)
+        public MainWindowView(MainWindowVM vm)
         {
             InitializeComponent();
-            DataContext = this.VM = VM;
+            DataContext = this.vm = vm;
         }
 
         /// <summary>
@@ -33,10 +33,9 @@ namespace ExpSystem.View
             droppedFile = droppedFiles.Last();
             if ((System.IO.Path.GetExtension(droppedFile).ToLowerInvariant() == ".txt") || (System.IO.Path.GetExtension(droppedFile).ToLowerInvariant() == ".mkb"))
             {
-                VM.ExpSystemDB = droppedFile;
-                Title = "ExpSystem - " + System.IO.Path.GetFileName(VM.ExpSystemDB);
-                FileReader fr = new FileReader();
-                VM.ReadData(VM.ExpSystemDB);
+                vm.ExpSystemDB = droppedFile;
+                Title = "ExpSystem - " + System.IO.Path.GetFileName(vm.ExpSystemDB);
+                vm.ReadData(vm.ExpSystemDB);
             }
         }
     }

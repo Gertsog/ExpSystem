@@ -22,7 +22,6 @@ namespace ExpSystem
 
         private int counter;
 
-
         public Consultation()
         {
 
@@ -31,28 +30,28 @@ namespace ExpSystem
         /// <summary>
         /// Счётчик вопросов
         /// </summary>
-        public void count(FileReader fr)
+        public void Count(FileReader fr)
         {
             if (counter > 0)
             {
                 counter++;
-                setQuestion(fr);
+                SetQuestion(fr);
             }
         }
 
         /// <summary>
         /// Начало консультации
         /// </summary>
-        public void startConsultation(FileReader fr)
+        public void StartConsultation(FileReader fr)
         {
             counter = 1;
-            setQuestion(fr);
+            SetQuestion(fr);
         }
 
         /// <summary>
         /// Установка конкретного вопроса в текстовое поле
         /// </summary>
-        public void setQuestion(FileReader fr)
+        public void SetQuestion(FileReader fr)
         {
             if (counter == 0)
             {
@@ -73,7 +72,7 @@ namespace ExpSystem
         /// <summary>
         /// Плучение ответа на конкретный вопрос
         /// </summary>
-        public bool setAnswer(FileReader fr, double answer)
+        public bool SetAnswer(FileReader fr, double answer)
         {
             if (counter == 0)
             {
@@ -97,7 +96,7 @@ namespace ExpSystem
         /// <summary>
         /// Пересчёт вероятностей
         /// </summary>
-        public void calculate(FileReader fr)
+        public void Calculate(FileReader fr)
         {
             double probability;
             Question question = fr.Questions.First(q => q.QuestionNumber.Equals(counter));

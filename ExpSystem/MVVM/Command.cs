@@ -22,6 +22,5 @@ namespace ExpSystem.MVVM
         {
             action.Invoke();
         }
-
     }
 }

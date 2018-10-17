@@ -173,7 +173,7 @@ namespace ExpSystem.View
                     else
                     {
                         ReadData(expSystemDB);
-                        consultation.startConsultation(fr);
+                        consultation.StartConsultation(fr);
                         Dialog = consultation.Dialog;
                     }
                 });
@@ -190,10 +190,10 @@ namespace ExpSystem.View
             {
                 return click1 = click1 ?? new Command(() =>
                 {
-                    if (consultation.setAnswer(fr, 1))
+                    if (consultation.SetAnswer(fr, 1))
                     {
-                        consultation.calculate(fr);
-                        consultation.count(fr);
+                        consultation.Calculate(fr);
+                        consultation.Count(fr);
                         fillHypotheses();
                         fillQuestions();
                     }
@@ -212,10 +212,10 @@ namespace ExpSystem.View
             {
                 return click075 = click075 ?? new Command(() =>
                 {
-                    if (consultation.setAnswer(fr, 0.75))
+                    if (consultation.SetAnswer(fr, 0.75))
                     {
-                        consultation.calculate(fr);
-                        consultation.count(fr);
+                        consultation.Calculate(fr);
+                        consultation.Count(fr);
                         fillHypotheses();
                         fillQuestions();
                     }
@@ -234,10 +234,10 @@ namespace ExpSystem.View
             {
                 return click05 = click05 ?? new Command(() =>
                 {
-                    if (consultation.setAnswer(fr, 0.5))
+                    if (consultation.SetAnswer(fr, 0.5))
                     {
-                        consultation.calculate(fr);
-                        consultation.count(fr);
+                        consultation.Calculate(fr);
+                        consultation.Count(fr);
                         fillHypotheses();
                         fillQuestions();
                     }
@@ -256,10 +256,10 @@ namespace ExpSystem.View
             {
                 return click025 = click025 ?? new Command(() =>
                 {
-                    if (consultation.setAnswer(fr, 0.25))
+                    if (consultation.SetAnswer(fr, 0.25))
                     {
-                        consultation.calculate(fr);
-                        consultation.count(fr);
+                        consultation.Calculate(fr);
+                        consultation.Count(fr);
                         fillHypotheses();
                         fillQuestions();
                     }
@@ -278,10 +278,10 @@ namespace ExpSystem.View
             {
                 return click0 = click0 ?? new Command(() =>
                 {
-                    if (consultation.setAnswer(fr, 0))
+                    if (consultation.SetAnswer(fr, 0))
                     {
-                        consultation.calculate(fr);
-                        consultation.count(fr);
+                        consultation.Calculate(fr);
+                        consultation.Count(fr);
                         fillHypotheses();
                         fillQuestions();
                     }
@@ -299,7 +299,7 @@ namespace ExpSystem.View
         /// </summary>
         public void ReadData(string db)
         {
-            if (fr.readFile(db))
+            if (fr.ReadFile(db))
             {
                 Dialog = "Для начала консультации нажмите кнопку \"Старт\"";
                 Title = "";

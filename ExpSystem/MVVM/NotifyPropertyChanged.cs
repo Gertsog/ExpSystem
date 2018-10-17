@@ -14,7 +14,6 @@ namespace ExpSystem.MVVM
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
-
         }
     }
 }
