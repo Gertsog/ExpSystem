@@ -325,7 +325,6 @@ namespace ExpSystem.View
             {
                 hypotheses.Add(h);
             }
-            OnPropertyChanged("Hypotheses");
         }
 
         /// <summary>
@@ -338,7 +337,6 @@ namespace ExpSystem.View
             {
                 questions.Add(q);
             }
-            OnPropertyChanged("Questions");
         }
 
         #endregion

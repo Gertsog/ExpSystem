@@ -25,7 +25,6 @@ namespace ExpSystem
         public Hypothesis(string hypothesisName, double defaultProbability)
         {
             HypothesisName = hypothesisName;
-            DefaultProbability = defaultProbability;
             CurrentProbability = defaultProbability;
         }
     }
