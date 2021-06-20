@@ -5,13 +5,13 @@ namespace ExpSystem.MVVM
 {
     class Command : ICommand
     {
+        private Action action;
+        public event EventHandler CanExecuteChanged;
+
         public Command(Action action)
         {
             this.action = action;
         }
-
-        private Action action;
-        public event EventHandler CanExecuteChanged;
 
         public bool CanExecute(object parameter)
         {

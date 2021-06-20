@@ -1,16 +1,18 @@
-﻿using ExpSystem.MVVM;
+﻿using ExpSystem.Entities;
+using ExpSystem.MVVM;
 using Microsoft.Win32;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace ExpSystem.View
 {
     public class MainWindowVM : NotifyPropertyChanged
     {
-        FileReader fr = new FileReader();
-        Consultation consultation = new Consultation();
-
         #region properties
+
+        private Consultation consultation;
 
         /// <summary>
         /// Заголовок окна
@@ -21,12 +23,10 @@ namespace ExpSystem.View
             get { return windowTitle; }
             set
             {
+                if (windowTitle != value)
                 {
-                    if (windowTitle != value)
-                    {
-                        windowTitle = value;
-                        OnPropertyChanged("WindowTitle");
-                    }
+                    windowTitle = value;
+                    OnPropertyChanged("WindowTitle");
                 }
             }
         }
@@ -122,10 +122,11 @@ namespace ExpSystem.View
 
         public MainWindowVM()
         {
+            consultation = new Consultation();
             hypotheses = new ObservableCollection<Hypothesis>();
             questions = new ObservableCollection<Question>();
             WindowTitle = "ExpSystem";
-            Dialog = "Откройте файл или перетащите его на форму";
+            Dialog = Phrases.OpenFile;
         }
 
         #endregion
@@ -150,7 +151,7 @@ namespace ExpSystem.View
                     {
                         expSystemDB = fileDialog.FileName;
                         WindowTitle = "ExpSystem - " + System.IO.Path.GetFileName(expSystemDB);
-                        ReadData(expSystemDB);
+                        ParseData(expSystemDB);
                     }
                 });
             }
@@ -166,14 +167,14 @@ namespace ExpSystem.View
             {
                 return startConsultation = startConsultation ?? new Command(() =>
                 {
-                    if (fr.Hypotheses.Count == 0)
+                    if (consultation.Hypotheses.Count == 0)
                     {
-                        Dialog = "Файл не выбран";
+                        Dialog = Phrases.NoFileSelected;
                     }
                     else
                     {
-                        ReadData(expSystemDB);
-                        consultation.StartConsultation(fr);
+                        ParseData(expSystemDB); // для сброса параметров к исходным
+                        consultation.StartConsultation();
                         Dialog = consultation.Dialog;
                     }
                 });
@@ -184,111 +185,33 @@ namespace ExpSystem.View
         /// Обработка кнопки "Да"
         /// </summary>
         private ICommand click1;
-        public ICommand Click1
-        {
-            get
-            {
-                return click1 = click1 ?? new Command(() =>
-                {
-                    if (consultation.SetAnswer(fr, 1))
-                    {
-                        consultation.Calculate(fr);
-                        consultation.Count(fr);
-                        fillHypotheses();
-                        fillQuestions();
-                    }
-                    Dialog = consultation.Dialog;
-                });
-            }
-        }
+        public ICommand Click1 => click1 = click1 ?? new Command(() => clickAnswer(1));
 
         /// <summary>
         /// Обработка кнопки "Скорее да"
         /// </summary>
         private ICommand click075;
-        public ICommand Click075
-        {
-            get
-            {
-                return click075 = click075 ?? new Command(() =>
-                {
-                    if (consultation.SetAnswer(fr, 0.75))
-                    {
-                        consultation.Calculate(fr);
-                        consultation.Count(fr);
-                        fillHypotheses();
-                        fillQuestions();
-                    }
-                    Dialog = consultation.Dialog;
-                });
-            }
-        }
+        public ICommand Click075 => click075 = click075 ?? new Command(() => clickAnswer(0.75));
+        
 
         /// <summary>
         /// Обработка кнопки "Не знаю"
         /// </summary>
         private ICommand click05;
-        public ICommand Click05
-        {
-            get
-            {
-                return click05 = click05 ?? new Command(() =>
-                {
-                    if (consultation.SetAnswer(fr, 0.5))
-                    {
-                        consultation.Calculate(fr);
-                        consultation.Count(fr);
-                        fillHypotheses();
-                        fillQuestions();
-                    }
-                    Dialog = consultation.Dialog;
-                });
-            }
-        }
+        public ICommand Click05 => click05 = click05 ?? new Command(() => clickAnswer(0.5));
+        
 
         /// <summary>
         /// Обработка кнопки "Скорее нет"
         /// </summary>
         private ICommand click025;
-        public ICommand Click025
-        {
-            get
-            {
-                return click025 = click025 ?? new Command(() =>
-                {
-                    if (consultation.SetAnswer(fr, 0.25))
-                    {
-                        consultation.Calculate(fr);
-                        consultation.Count(fr);
-                        fillHypotheses();
-                        fillQuestions();
-                    }
-                    Dialog = consultation.Dialog;
-                });
-            }
-        }
+        public ICommand Click025 => click025 = click025 ?? new Command(() => clickAnswer(0.25));
 
         /// <summary>
         /// Обработка кнопки "Нет"
         /// </summary>
         private ICommand click0;
-        public ICommand Click0
-        {
-            get
-            {
-                return click0 = click0 ?? new Command(() =>
-                {
-                    if (consultation.SetAnswer(fr, 0))
-                    {
-                        consultation.Calculate(fr);
-                        consultation.Count(fr);
-                        fillHypotheses();
-                        fillQuestions();
-                    }
-                    Dialog = consultation.Dialog;
-                });
-            }
-        }
+        public ICommand Click0 => click0 = click0 ?? new Command(() => clickAnswer(0));
 
         #endregion
 
@@ -297,13 +220,18 @@ namespace ExpSystem.View
         /// <summary>
         /// Чтение данных из файла
         /// </summary>
-        public void ReadData(string db)
+        public void ParseData(string db)
         {
-            if (fr.ReadFile(db))
+            consultation = new Consultation();
+            ConsultationFiller cf = new ConsultationFiller(consultation);
+            cf.ReadData(db);
+
+            if (!cf.HasErrorOccured)
             {
-                Dialog = "Для начала консультации нажмите кнопку \"Старт\"";
+                Dialog = Phrases.PressStart;
                 Title = "";
-                foreach (string str in fr.Title)
+
+                foreach (string str in consultation.Title)
                     Title += str + "\n";
 
                 fillHypotheses();
@@ -311,8 +239,15 @@ namespace ExpSystem.View
             }
             else
             {
-                Dialog = fr.Dialog;
+                Dialog = consultation.Dialog;
             }
+        }
+        private void clickAnswer(double answer)
+        {
+            consultation.SetAnswer(answer);
+            Dialog = consultation.Dialog;
+            fillHypotheses();
+            fillQuestions();
         }
 
         /// <summary>
@@ -320,8 +255,9 @@ namespace ExpSystem.View
         /// </summary>
         private void fillHypotheses()
         {
+            List<Hypothesis> temp = consultation.Hypotheses.OrderByDescending(h => h.CurrentProbability).ToList();
             hypotheses.Clear();
-            foreach (Hypothesis h in fr.Hypotheses)
+            foreach (Hypothesis h in temp)
             {
                 hypotheses.Add(h);
             }
@@ -333,7 +269,7 @@ namespace ExpSystem.View
         private void fillQuestions()
         {
             questions.Clear();
-            foreach (Question q in fr.Questions)
+            foreach (Question q in consultation.Questions)
             {
                 questions.Add(q);
             }

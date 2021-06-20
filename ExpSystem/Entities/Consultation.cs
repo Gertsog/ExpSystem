@@ -1,26 +1,37 @@
-﻿using System.Linq;
+﻿using ExpSystem.Entities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ExpSystem
 {
     public class Consultation
     {
+        // счетчик вопросов
+        private int counter;
+
         /// <summary>
         /// Текст для диалога с пользователем
         /// </summary>
         private string dialog;
-        public string Dialog
-        {
-            get { return dialog; }
-            set
-            {
-                if (dialog != value)
-                {
-                    dialog = value;
-                }
-            }
-        }
+        public string Dialog { get => dialog; set => dialog = value; }
 
-        private int counter;
+        /// <summary>
+        /// Строки заголовка
+        /// </summary>
+        private List<string> title; 
+        public List<string> Title { get => title; set => title = value; }
+
+        /// <summary>
+        /// Коллекция гипотез
+        /// </summary>
+        private List<Hypothesis> hypotheses = new List<Hypothesis>();
+        public List<Hypothesis> Hypotheses { get => hypotheses; set => hypotheses = value; }
+
+        /// <summary>
+        /// Коллекция вопросов
+        /// </summary>
+        private List<Question> questions = new List<Question>();
+        public List<Question> Questions { get => questions; set => questions = value; }
 
         public Consultation()
         {
@@ -28,89 +39,72 @@ namespace ExpSystem
         }
 
         /// <summary>
-        /// Счётчик вопросов
-        /// </summary>
-        public void Count(FileReader fr)
-        {
-            if (counter > 0)
-            {
-                counter++;
-                SetQuestion(fr);
-            }
-        }
-
-        /// <summary>
         /// Начало консультации
         /// </summary>
-        public void StartConsultation(FileReader fr)
+        public void StartConsultation()
         {
-            counter = 1;
-            SetQuestion(fr);
+            if (questions.Count >= 1)
+            {
+                counter = 1;
+                SetQuestion();
+            }
         }
 
         /// <summary>
         /// Установка конкретного вопроса в текстовое поле
         /// </summary>
-        public void SetQuestion(FileReader fr)
-        {
-            if (counter == 0)
+        public void SetQuestion() {
+            if (questions.Any(q => q.QuestionNumber.Equals(counter)))
             {
-                Dialog = "Начните консультацию";
-            }
-            if (fr.Questions.Any(q => q.QuestionNumber.Equals(counter)))
-            {
-                Question question = fr.Questions.First(q => q.QuestionNumber.Equals(counter));
+                Question question = questions.First(q => q.QuestionNumber.Equals(counter));
                 Dialog = question.QuestionNumber + ". " + question.QuestionText;
             }
-            else
+            else 
             {
                 counter = 0;
-                Dialog = "Консультация окончена";
-            }
-        }
-        
-        /// <summary>
-        /// Плучение ответа на конкретный вопрос
-        /// </summary>
-        public bool SetAnswer(FileReader fr, double answer)
-        {
-            if (counter == 0)
-            {
-                Dialog = "Начните консультацию";
-                return false;
-            }
-            if ((fr.Questions.Count > 0) && (counter > 0))
-            {
-                Question question = fr.Questions.First(q => q.QuestionNumber.Equals(counter));
-                question.Answer = answer;
-                return true;
-            }
-            else
-            {
-                counter = 0;
-                Dialog = "Консультация окончена";
-                return false;
+                Dialog = Phrases.ConsultationEnded;
             }
         }
 
         /// <summary>
-        /// Пересчёт вероятностей
+        /// Плучение ответа на конкретный вопрос
         /// </summary>
-        public void Calculate(FileReader fr)
+        public void SetAnswer(double answer)
+        {
+            if (counter == 0)
+            {
+                Dialog = Phrases.StartConsultation;
+            }
+            else
+            {
+                Question question = questions.First(q => q.QuestionNumber.Equals(counter));
+                question.Answer = answer;
+                Calculate();
+
+                counter++;
+                SetQuestion();
+            }
+        }
+
+        /// <summary>
+        /// Перерасчёт вероятностей
+        /// </summary>
+        public void Calculate()
         {
             double probability;
-            Question question = fr.Questions.First(q => q.QuestionNumber.Equals(counter));
+            Question question = questions.First(q => q.QuestionNumber.Equals(counter));
          
-            foreach (Hypothesis h in fr.Hypotheses)
+            foreach (Hypothesis h in hypotheses)
             {
-                foreach(int q in h.questionNumbers)
+                foreach(int questionNumber in h.questionNumbers)
                 {
-                    if (q == question.QuestionNumber)
+                    if (questionNumber == question.QuestionNumber)
                     {
-                        int index = h.questionNumbers.IndexOf(q);
+                        int index = h.questionNumbers.IndexOf(questionNumber);
                         double pp = h.pPositive[index];
                         double pn = h.pNegative[index];
-                        if(question.Answer < 0.5)
+
+                        if (question.Answer < 0.5)
                         {
                             probability = ((1 - pp) * h.CurrentProbability) / ((1 - pp) * h.CurrentProbability + (1 - pn) * (1 - h.CurrentProbability));
                             h.CurrentProbability = probability + ((question.Answer * (h.CurrentProbability - probability)) / (0.5));

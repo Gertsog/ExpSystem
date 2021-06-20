@@ -31,11 +31,12 @@ namespace ExpSystem.View
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
             droppedFile = droppedFiles.Last();
-            if ((System.IO.Path.GetExtension(droppedFile).ToLowerInvariant() == ".txt") || (System.IO.Path.GetExtension(droppedFile).ToLowerInvariant() == ".mkb"))
+            if ((System.IO.Path.GetExtension(droppedFile).ToLowerInvariant() == ".txt") ||
+                (System.IO.Path.GetExtension(droppedFile).ToLowerInvariant() == ".mkb"))
             {
                 vm.ExpSystemDB = droppedFile;
                 Title = "ExpSystem - " + System.IO.Path.GetFileName(vm.ExpSystemDB);
-                vm.ReadData(vm.ExpSystemDB);
+                vm.ParseData(vm.ExpSystemDB);
             }
         }
     }

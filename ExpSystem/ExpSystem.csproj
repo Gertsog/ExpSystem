@@ -70,8 +70,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Entities\ConsultationFiller.cs" />
     <Compile Include="Entities\Consultation.cs" />
     <Compile Include="Entities\FileReader.cs" />
+    <Compile Include="Entities\Phrases.cs" />
     <Compile Include="MVVM\Command.cs" />
     <Compile Include="MVVM\NotifyPropertyChanged.cs" />
     <Compile Include="Entities\Question.cs" />
